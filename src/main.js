@@ -5,23 +5,31 @@ import {
   showLoader,
   hideLoader,
   clearGallery,
+  showLoadMoreButton,
+  hideLoadMoreButton,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
 const input = form.querySelector('input[name="search-text"]');
+const loadMore = document.querySelector('.loadMore');
+
+let page = 1;
+let userInput;
 
 hideLoader();
+hideLoadMoreButton();
 
 form.addEventListener('submit', event => {
   event.preventDefault();
-  const query = input.value.trim();
+  userInput = input.value.trim();
+  page = 1;
 
   showLoader();
 
-  if (query === '') {
+  if (userInput === '') {
     return;
   }
-  getImagesByQuery(query)
+  getImagesByQuery(userInput, page)
     .then(data => {
       if (data.hits.length === 0) {
         iziToast.error({
@@ -35,9 +43,10 @@ form.addEventListener('submit', event => {
         hideLoader();
         return;
       }
+      clearGallery();
       createGallery(data.hits);
       hideLoader();
-      console.log(data);
+      showLoadMoreButton();
     })
     .catch(error => {
       clearGallery();
@@ -49,3 +58,20 @@ form.addEventListener('submit', event => {
       console.log(error);
     });
 });
+
+loadMore.addEventListener('click', loadMoreFunction);
+
+async function loadMoreFunction() {
+  loadMore.disabled = true;
+  hideLoadMoreButton();
+  page++;
+  userInput = input.value.trim();
+  try {
+    const data = await getImagesByQuery(userInput, page);
+    createGallery(data.hits);
+    loadMore.disabled = false;
+    showLoadMoreButton();
+  } catch (error) {
+    console.log(error);
+  }
+}

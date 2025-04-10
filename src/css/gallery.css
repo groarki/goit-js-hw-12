@@ -98,3 +98,12 @@
     transform: scale(1) translate(-50%, -50%);
   }
 }
+
+.hidden {
+  display: none;
+}
+.loadMore {
+  width: 125px;
+  height: 40px;
+  margin: 32px auto;
+}
