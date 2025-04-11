@@ -4,6 +4,7 @@ import 'simplelightbox/dist/simple-lightbox.min.css';
 const loader = document.querySelector('.loader');
 const list = document.querySelector('.gallery');
 const loadMore = document.querySelector('.loadMore');
+const endOfHits = document.querySelector('.endText');
 
 export function createGallery(images) {
   const card = images
@@ -71,4 +72,8 @@ export function showLoadMoreButton() {
 
 export function hideLoadMoreButton() {
   loadMore.classList.add('hidden');
+}
+
+export function showEndText() {
+  endOfHits.classList.remove('text-hidden');
 }

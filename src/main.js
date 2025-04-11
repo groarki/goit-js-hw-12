@@ -7,6 +7,7 @@ import {
   clearGallery,
   showLoadMoreButton,
   hideLoadMoreButton,
+  showEndText,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
@@ -37,7 +38,6 @@ form.addEventListener('submit', event => {
             'Sorry, there are no images matching your search query. Please try again!',
           position: 'topRight',
         });
-
         form.reset();
         clearGallery();
         hideLoader();
@@ -47,6 +47,7 @@ form.addEventListener('submit', event => {
       createGallery(data.hits);
       hideLoader();
       showLoadMoreButton();
+      console.log(data);
     })
     .catch(error => {
       clearGallery();
@@ -65,12 +66,30 @@ async function loadMoreFunction() {
   loadMore.disabled = true;
   hideLoadMoreButton();
   page++;
+
   userInput = input.value.trim();
   try {
     const data = await getImagesByQuery(userInput, page);
+    if (page >= data.totalHits / 15) {
+      createGallery(data.hits);
+      hideLoadMoreButton();
+      showEndText();
+      return;
+    }
     createGallery(data.hits);
-    loadMore.disabled = false;
-    showLoadMoreButton();
+    setTimeout(() => {
+      const elem = document.querySelector('.galleryItem');
+      const elemHeight = elem.getBoundingClientRect().height * 2;
+      console.log(elemHeight);
+
+      window.scrollBy({
+        top: elemHeight,
+        left: 0,
+        behavior: 'smooth',
+      });
+      loadMore.disabled = false;
+      showLoadMoreButton();
+    }, 100);
   } catch (error) {
     console.log(error);
   }
