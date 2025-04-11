@@ -41,6 +41,7 @@ form.addEventListener('submit', event => {
         form.reset();
         clearGallery();
         hideLoader();
+        hideLoadMoreButton();
         return;
       }
       clearGallery();
