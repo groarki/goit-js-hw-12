@@ -47,7 +47,6 @@ form.addEventListener('submit', event => {
       createGallery(data.hits);
       hideLoader();
       showLoadMoreButton();
-      console.log(data);
     })
     .catch(error => {
       clearGallery();
@@ -80,7 +79,6 @@ async function loadMoreFunction() {
     setTimeout(() => {
       const elem = document.querySelector('.galleryItem');
       const elemHeight = elem.getBoundingClientRect().height * 2;
-      console.log(elemHeight);
 
       window.scrollBy({
         top: elemHeight,
