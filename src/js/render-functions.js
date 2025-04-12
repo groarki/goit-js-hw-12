@@ -77,3 +77,6 @@ export function hideLoadMoreButton() {
 export function showEndText() {
   endOfHits.classList.remove('text-hidden');
 }
+export function hideEndText() {
+  endOfHits.classList.add('text-hidden');
+}

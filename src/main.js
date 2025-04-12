@@ -14,8 +14,6 @@ const form = document.querySelector('.form');
 const input = form.querySelector('input[name="search-text"]');
 const loadMore = document.querySelector('.loadMore');
 
-// const totalPages = Math.ceil(data.totalHits / data.hits.length);
-
 let page = 1;
 let userInput;
 
@@ -28,6 +26,7 @@ form.addEventListener('submit', event => {
   page = 1;
 
   showLoader();
+  hideEndText();
 
   if (userInput === '') {
     return;
@@ -75,7 +74,6 @@ async function loadMoreFunction() {
   userInput = input.value.trim();
   try {
     const data = await getImagesByQuery(userInput, page);
-    console.log(data);
     if (page >= Math.ceil(data.totalHits / 15)) {
       createGallery(data.hits);
       hideLoadMoreButton();
