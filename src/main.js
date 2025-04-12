@@ -14,6 +14,8 @@ const form = document.querySelector('.form');
 const input = form.querySelector('input[name="search-text"]');
 const loadMore = document.querySelector('.loadMore');
 
+// const totalPages = Math.ceil(data.totalHits / data.hits.length);
+
 let page = 1;
 let userInput;
 
@@ -43,6 +45,8 @@ form.addEventListener('submit', event => {
         hideLoader();
         hideLoadMoreButton();
         return;
+      } else if (Math.ceil(data.totalHits / 15) === 1) {
+        hideLoadMoreButton();
       }
       clearGallery();
       createGallery(data.hits);
@@ -57,6 +61,7 @@ form.addEventListener('submit', event => {
         position: 'topRight',
       });
       console.log(error);
+      hideLoadMoreButton();
     });
 });
 
@@ -70,7 +75,8 @@ async function loadMoreFunction() {
   userInput = input.value.trim();
   try {
     const data = await getImagesByQuery(userInput, page);
-    if (page >= data.totalHits / 15) {
+    console.log(data);
+    if (page >= Math.ceil(data.totalHits / 15)) {
       createGallery(data.hits);
       hideLoadMoreButton();
       showEndText();

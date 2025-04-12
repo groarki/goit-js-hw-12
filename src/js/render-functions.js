@@ -61,10 +61,10 @@ export function clearGallery() {
   list.innerHTML = '';
 }
 export function showLoader() {
-  loader.classList.add('loader');
+  loader.classList.remove('hidden');
 }
 export function hideLoader() {
-  loader.classList.remove('loader');
+  loader.classList.add('hidden');
 }
 export function showLoadMoreButton() {
   loadMore.classList.remove('hidden');

@@ -15,9 +15,6 @@ export async function getImagesByQuery(query, page) {
     },
   };
 
-  // return axios.get('/', par).then(resp => {
-  //   return resp.data;
-  // });
   const { data } = await axios.get('/', par);
   return data;
 }
