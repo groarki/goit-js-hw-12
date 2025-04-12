@@ -8,17 +8,17 @@ import {
   showLoadMoreButton,
   hideLoadMoreButton,
   showEndText,
+  hideEndText,
 } from './js/render-functions';
 
 const form = document.querySelector('.form');
 const input = form.querySelector('input[name="search-text"]');
 const loadMore = document.querySelector('.loadMore');
 
-let page = 1;
-let userInput;
-
 hideLoader();
 hideLoadMoreButton();
+let page = 1;
+let userInput;
 
 form.addEventListener('submit', event => {
   event.preventDefault();
@@ -44,13 +44,18 @@ form.addEventListener('submit', event => {
         hideLoader();
         hideLoadMoreButton();
         return;
-      } else if (Math.ceil(data.totalHits / 15) === 1) {
-        hideLoadMoreButton();
       }
+
       clearGallery();
       createGallery(data.hits);
       hideLoader();
-      showLoadMoreButton();
+      hideEndText();
+
+      if (data.totalHits > 15) {
+        showLoadMoreButton();
+      } else {
+        hideLoadMoreButton();
+      }
     })
     .catch(error => {
       clearGallery();
@@ -74,13 +79,16 @@ async function loadMoreFunction() {
   userInput = input.value.trim();
   try {
     const data = await getImagesByQuery(userInput, page);
+    createGallery(data.hits);
+    hideEndText();
+
     if (page >= Math.ceil(data.totalHits / 15)) {
-      createGallery(data.hits);
       hideLoadMoreButton();
       showEndText();
+      loadMore.disabled = false;
       return;
     }
-    createGallery(data.hits);
+
     setTimeout(() => {
       const elem = document.querySelector('.galleryItem');
       const elemHeight = elem.getBoundingClientRect().height * 2;
